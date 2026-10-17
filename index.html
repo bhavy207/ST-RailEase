@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RailEase - Online Railway Ticket Booking Portal</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7fa;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #ffffff;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 26px;
+        }
+
+        .brand-title {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-sub {
+            font-size: 12px;
+            opacity: 0.85;
+            display: block;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 92%;
+            margin: 35px auto;
+            flex: 1;
+        }
+
+        .booking-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #1e3c72;
+        }
+
+        .card-header {
+            margin-bottom: 24px;
+        }
+
+        .card-header h2 {
+            font-size: 20px;
+            color: #1e3c72;
+            margin-bottom: 6px;
+        }
+
+        .card-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        input[type="text"],
+        input[type="date"] {
+            padding: 10px 14px;
+            border: 1px solid #ccd0d5;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: #2a5298;
+            box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.15);
+        }
+
+        .error-message {
+            display: none;
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #f87171;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 18px;
+            font-weight: 500;
+        }
+
+        .btn-submit {
+            background-color: #ff6b35;
+            color: #ffffff;
+            border: none;
+            padding: 12px 28px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .btn-submit:hover {
+            background-color: #e85a24;
+        }
+
+        .results-section {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .results-header {
+            font-size: 18px;
+            color: #1e3c72;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .train-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .train-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        .train-info h3 {
+            font-size: 16px;
+            color: #1e3c72;
+            margin-bottom: 4px;
+        }
+
+        .train-info p {
+            font-size: 13px;
+            color: #555;
+        }
+
+        .train-fare {
+            text-align: right;
+        }
+
+        .fare-amount {
+            font-size: 18px;
+            font-weight: 700;
+            color: #15803d;
+            margin-bottom: 6px;
+        }
+
+        .btn-book {
+            background-color: #1e3c72;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        footer {
+            background-color: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
+            padding: 16px;
+            font-size: 13px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-area">
+            <span class="logo-icon">&#128646;</span>
+            <div>
+                <span class="brand-title">RailEase</span>
+                <span class="brand-sub">State Transport Railway Booking</span>
+            </div>
+        </div>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#trains">Trains</a>
+            <a href="#contact">Support</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="booking-card">
+            <div class="card-header">
+                <h2>Book Train Tickets</h2>
+                <p>Search trains across state railway routes</p>
+            </div>
+
+            <!-- Form Validation Error Message -->
+            <div id="validation-msg" class="error-message"></div>
+
+            <form id="booking-form" onsubmit="handleSearch(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="source">Source Station</label>
+                        <input type="text" id="source" name="source" placeholder="e.g. Mumbai Central">
+                    </div>
+                    <div class="form-group">
+                        <label for="destination">Destination Station</label>
+                        <input type="text" id="destination" name="destination" placeholder="e.g. New Delhi">
+                    </div>
+                    <div class="form-group">
+                        <label for="travel-date">Journey Date</label>
+                        <input type="date" id="travel-date" name="travel_date">
+                    </div>
+                </div>
+                <button type="submit" id="search-btn" class="btn-submit">Search Trains</button>
+            </form>
+
+            <!-- Search Results Section -->
+            <div id="search-results" class="results-section">
+                <div class="results-header">
+                    <h3>Available Trains: <span id="route-text"></span></h3>
+                    <span id="date-text" style="font-size: 13px; color: #666;"></span>
+                </div>
+                <div class="train-list" id="train-items">
+                    <div class="train-card">
+                        <div class="train-info">
+                            <h3>12951 - Rajdhani Superfast Express</h3>
+                            <p>Departure: 16:30 | Arrival: 08:30 (Next Day)</p>
+                            <p>Duration: 16h 00m | Class: 3A, 2A, 1A</p>
+                        </div>
+                        <div class="train-fare">
+                            <div class="fare-amount">&#8377;2,180</div>
+                            <button class="btn-book">Book Now</button>
+                        </div>
+                    </div>
+                    <div class="train-card">
+                        <div class="train-info">
+                            <h3>12953 - August Kranti Tejas Express</h3>
+                            <p>Departure: 17:10 | Arrival: 10:55 (Next Day)</p>
+                            <p>Duration: 17h 45m | Class: 3A, 2A, CC</p>
+                        </div>
+                        <div class="train-fare">
+                            <div class="fare-amount">&#8377;1,950</div>
+                            <button class="btn-book">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 RailEase Transport Agency. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Set default date to tomorrow
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        document.getElementById('travel-date').value = tomorrow.toISOString().split('T')[0];
+
+        function handleSearch(event) {
+            event.preventDefault();
+            const source = document.getElementById('source').value.trim();
+            const dest = document.getElementById('destination').value.trim();
+            const date = document.getElementById('travel-date').value;
+            const errorDiv = document.getElementById('validation-msg');
+            const resultsDiv = document.getElementById('search-results');
+
+            // Reset previous messages
+            errorDiv.style.display = 'none';
+            errorDiv.innerText = '';
+
+            // Validation: Empty destination check (as required by question)
+            if (!dest) {
+                errorDiv.innerText = 'Please enter a destination station.';
+                errorDiv.style.display = 'block';
+                resultsDiv.style.display = 'none';
+                return;
+            }
+
+            if (!source) {
+                errorDiv.innerText = 'Please enter a source station.';
+                errorDiv.style.display = 'block';
+                resultsDiv.style.display = 'none';
+                return;
+            }
+
+            // Display results
+            document.getElementById('route-text').innerText = source + ' → ' + dest;
+            document.getElementById('date-text').innerText = 'Date: ' + date;
+            resultsDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
